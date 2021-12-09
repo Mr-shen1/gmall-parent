@@ -10,7 +10,7 @@
         <module>server-gateway</module>
     </modules>
 
-    <!--引入spring boot 父工程 test -->
+    <!--引入spring boot 父工程 哈哈 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
