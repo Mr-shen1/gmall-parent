@@ -1,0 +1,85 @@
+{
+  "id": null,
+  "spuId": 35,
+  "price": "5999.00",
+  "skuName": "Apple iPhone 13 (A2634) 128GB 粉色 支持移动联通电信5G 双卡双待手机",
+  "weight": "0.175",
+  "skuDesc": "商品名称：AppleiPhone 13商品编号：100026667858商品毛重：320.00g商品产地：中国大陆运行内存：其他机身存储：128GB分辨率：其他充电器：其他系统：iOS支持IPv6：支持IPv6",
+  "category3Id": 61,
+  "skuDefaultImg": "http://192.168.112.130:9000/mall0624/bc2ef92fc7624e0e86a5748d627214ad_1.png",
+  "tmId": 12,
+  "skuAttrValueList": [
+    {
+      "attrId": "1",
+      "valueId": "6"
+    },
+    {
+      "attrId": "2",
+      "valueId": "16"
+    },
+    {
+      "attrId": "3",
+      "valueId": "20"
+    },
+    {
+      "attrId": "4",
+      "valueId": "27"
+    },
+    {
+      "attrId": "5",
+      "valueId": "34"
+    }
+  ],
+  "skuSaleAttrValueList": [
+    {
+      "saleAttrValueId": "134",
+      "saleAttrValueName": "粉色",
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色"
+    },
+    {
+      "saleAttrValueId": "136",
+      "saleAttrValueName": "256G",
+      "baseSaleAttrId": "2",
+      "saleAttrName": "选择版本"
+    },
+    {
+      "saleAttrValueId": "137",
+      "saleAttrValueName": "AC+",
+      "baseSaleAttrId": "3",
+      "saleAttrName": "选择套装"
+    }
+  ],
+  "skuImageList": [
+    {
+      "spuImgId": 291,
+      "imgName": "1.png",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/bc2ef92fc7624e0e86a5748d627214ad_1.png",
+      "isDefault": 1
+    },
+    {
+      "spuImgId": 292,
+      "imgName": "2.png",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/5d4de467c6d64f2eb9452dfe3e332160_2.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 293,
+      "imgName": "5.png",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/c54bebab744a4cc3ab95f9ceb595b1cf_5.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 294,
+      "imgName": "4.png",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/44d733f4fffc48999d01416f63f4a1d6_4.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 295,
+      "imgName": "3.png",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/7b68c9292da44f0da686504d709844e7_3.png",
+      "isDefault": 0
+    }
+  ]
+}

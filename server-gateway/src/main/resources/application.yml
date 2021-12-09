@@ -1,0 +1,18 @@
+server:
+  port: 80
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: service-product
+          uri: lb://service-product
+          predicates:
+            - Path=/admin/product/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true

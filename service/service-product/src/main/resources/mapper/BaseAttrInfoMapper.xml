@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.gmall.product.mapper.BaseAttrInfoMapper">
+
+    
+    
+    
+    
+    <resultMap id="attrMap" type="com.atguigu.gmall.model.product.BaseAttrInfo">
+        <id property="id" column="id"></id>
+        <result property="attrName" column="attr_name"></result>
+        <result property="categoryId" column="category_id"></result>
+        <result property="categoryLevel" column="category_level"></result>
+        <collection property="attrValueList"
+                    ofType="com.atguigu.gmall.model.product.BaseAttrValue"
+                    autoMapping="true">
+            <id property="id" column="attr_value_id"></id>
+<!--            <result property="valueName" column="value_name"></result>-->
+<!--            <result property="attrId" column="attr_id"></result>-->
+        </collection>
+    </resultMap>
+<!-- List<BaseAttrInfo> getBaseAttr(
+                            @Param("category1Id") Long category1Id,
+                            @Param("category2Id") Long category2Id,
+                            @Param("category3Id") Long category3Id); -->
+
+    <select id="getBaseAttr" resultMap="attrMap">
+        select
+               bai.id,
+               bai.attr_name,
+               bai.category_id,
+               bai.category_level,
+               bav.id attr_value_id,
+               bav.value_name,
+               bav.attr_id
+        from base_attr_info bai
+        inner join base_attr_value bav
+        on bai.id = bav.attr_id
+        <where>
+            <if test="category1Id != null and category1Id != 0">
+                or (category_id = #{category1Id} and category_level = 1)
+            </if>
+            <if test="category2Id != null and category2Id != 0">
+                or (category_id = #{category2Id} and category_level = 2)
+            </if>
+            <if test="category3Id != null and category3Id != 0">
+                or (category_id = #{category3Id} and category_level = 3)
+            </if>
+
+        </where>
+    </select>
+
+</mapper>

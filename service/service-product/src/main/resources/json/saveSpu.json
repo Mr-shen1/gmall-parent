@@ -1,0 +1,30 @@
+{
+  "id": null,
+  "spuName": "小米",
+  "description": "小米",
+  "category3Id": 61,
+  "spuImageList": [
+    {
+      "imgName": "list.jpg",
+      "imgUrl": "http://47.93.118.241/group1/M00/00/00/L1128V47i9GARYUWAADxtUrmGBA961.jpg"
+    }
+  ],
+  "spuSaleAttrList": [
+    {
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色",
+      "spuSaleAttrValueList": [
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "红色"
+        },
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "白色"
+        }
+      ]
+    }
+  ],
+  "tmId": 4
+}
+
