@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.atguigu.gmall.product.mapper.SkuInfoMapper">
+<mapper namespace="com.atguigu.gmall.product.client.mapper.SkuInfoMapper">
 
     <resultMap id="BaseResultMap" type="com.atguigu.gmall.model.product.SkuInfo">
             <id property="id" column="id" jdbcType="BIGINT"/>

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, SkuAttrValue>
-    implements SkuAttrValueService{
+    implements SkuAttrValueService {
 
 }
 

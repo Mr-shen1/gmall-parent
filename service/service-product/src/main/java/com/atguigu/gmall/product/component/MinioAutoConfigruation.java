@@ -19,13 +19,14 @@ public class MinioAutoConfigruation {
 
     //@Autowired
     //private MinioProperties minioProperties;
-    //
     @Bean
     public MinioClient createMinioClient(MinioProperties minioProperties) {
         String endpoint = minioProperties.getEndpoint();
         String accessKey = minioProperties.getAccessKey();
         String secretKey = minioProperties.getSecretKey();
         String bucketName = minioProperties.getBucketName();
+
+
 
         MinioClient minioClient = null;
         try {

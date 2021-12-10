@@ -9,6 +9,7 @@ spring:
           uri: lb://service-product
           predicates:
             - Path=/admin/product/**
+
       globalcors:
         cors-configurations:
           '[/**]':

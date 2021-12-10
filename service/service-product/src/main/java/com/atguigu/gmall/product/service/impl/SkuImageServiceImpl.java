@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class SkuImageServiceImpl extends ServiceImpl<SkuImageMapper, SkuImage>
-    implements SkuImageService{
+    implements SkuImageService {
 
 }
 
