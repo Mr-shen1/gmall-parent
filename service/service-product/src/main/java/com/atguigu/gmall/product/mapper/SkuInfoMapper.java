@@ -2,6 +2,9 @@ package com.atguigu.gmall.product.mapper;
 
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
 
 /**
 * @author SSS
@@ -11,6 +14,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
+    /**
+     * 根据skuId获取价格
+     * @param skuId
+     * @return
+     */
+    BigDecimal getSkuPriceById(@Param("skuId") Long skuId);
 }
 
 

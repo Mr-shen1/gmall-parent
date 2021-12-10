@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.gmall.product.mapper.BaseCategory1Mapper">
+
+
+
+    <resultMap id="CategoryVO1" type="com.atguigu.gmall.model.api.CategoryVO">
+        <id property="categoryId" column="c1_id"></id>
+        <result property="categoryName" column="c1_name"></result>
+        <collection property="categoryChild" ofType="com.atguigu.gmall.model.api.CategoryVO">
+            <id property="categoryId" column="c2_id"></id>
+            <result property="categoryName" column="c2_name"></result>
+            <collection property="categoryChild" ofType="com.atguigu.gmall.model.api.CategoryVO">
+                <id property="categoryId" column="c3_id"></id>
+                <result property="categoryName" column="c3_name"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getCategoryAll" resultMap="CategoryVO1">
+        select c1.id   c1_id,
+               c1.name c1_name,
+               c2.id   c2_id,
+               c2.name c2_name,
+               c3.id   c3_id,
+               c3.name c3_name
+        from base_category1 c1
+        left join base_category2 c2
+        on c1.id = c2.category1_id
+        left join base_category3 c3
+        on c2.id = c3.category2_id
+
+    </select>
+
+</mapper>

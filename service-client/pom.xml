@@ -12,12 +12,14 @@
     <description>封装所有的远程调用接口</description>
     <modules>
         <module>service-product-client</module>
+        <module>service-item-client</module>
     </modules>
 
     <artifactId>service-client</artifactId>
 
 
     <dependencies>
+
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
             <artifactId>common</artifactId>

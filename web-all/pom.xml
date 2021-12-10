@@ -8,16 +8,30 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <!--父工程-->
-    <packaging>pom</packaging>
-    <modules>
-        <module>service-product</module>
-        <module>service-item</module>
-    </modules>
-    <artifactId>service</artifactId>
+
+    <artifactId>web-all</artifactId>
+
+
+
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.atguigu.gmall</groupId>
+            <artifactId>service-item-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atguigu.gmall</groupId>
+            <artifactId>service-product-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
@@ -92,7 +106,4 @@
         </dependency>
 
     </dependencies>
-
-
-
 </project>

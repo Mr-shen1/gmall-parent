@@ -10,6 +10,15 @@ spring:
           predicates:
             - Path=/admin/product/**
 
+#        - id: service-item
+#          uri: lb://service-item
+#          predicates:
+#            - Path=/api/item/**
+
+        - id: web-all
+          uri: lb://web-all
+          predicates:
+            - Host=**.gmall.com
       globalcors:
         cors-configurations:
           '[/**]':
