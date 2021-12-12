@@ -11,8 +11,7 @@
 
     <artifactId>web-all</artifactId>
 
-
-
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -22,11 +21,6 @@
             <version>1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.atguigu.gmall</groupId>
-            <artifactId>service-product-client</artifactId>
-            <version>1.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

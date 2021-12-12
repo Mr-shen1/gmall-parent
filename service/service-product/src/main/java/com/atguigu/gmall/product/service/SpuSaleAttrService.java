@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service;
 
+import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -28,4 +29,11 @@ public interface SpuSaleAttrService extends IService<SpuSaleAttr> {
      * @return
      */
     List<SpuSaleAttr> getSpuSaleAttrBySpuIdAndSkuId(Long spuId, Long skuId);
+
+    /**
+     * 根据spuId获取商品属性切换所需的信息
+     * @param spuId
+     * @return
+     */
+    List<AttrValueJsonVO> getAttrValueJsonVOList(Long spuId);
 }

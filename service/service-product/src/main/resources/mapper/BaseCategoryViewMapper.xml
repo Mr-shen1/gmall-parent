@@ -20,10 +20,14 @@
         category2_id,category2_name,category3_id,
         category3_name
     </sql>
+
+
     <select id="getCategoryView" resultType="com.atguigu.gmall.model.product.BaseCategoryView">
 
         select *
         from base_category_view
         where category3_id = #{category3Id}
     </select>
+
+
 </mapper>

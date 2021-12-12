@@ -1,5 +1,7 @@
 package com.atguigu.gmall.item.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.Map;
 
 /**
@@ -15,5 +17,5 @@ public interface SkuDetailService {
      * @param skuId
      * @return
      */
-    Map<String, Object> getSkuDeatail(Long skuId);
+    Map<String, Object> getSkuDeatail(Long skuId) throws JsonProcessingException;
 }

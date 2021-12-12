@@ -8,8 +8,12 @@ spring:
     password: root
     url: jdbc:mysql://121.196.198.8:3306/gmall_product?useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 192.168.112.130
+    port: 6379
+    password: skf123!@!
 
-
+mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

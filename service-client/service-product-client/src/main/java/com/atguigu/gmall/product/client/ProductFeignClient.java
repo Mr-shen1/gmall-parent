@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.client;
 
+import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.api.CategoryVO;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuImage;
@@ -46,4 +47,8 @@ public interface ProductFeignClient {
     @GetMapping("/saleattr/{spuId}/{skuId}")
     List<SpuSaleAttr> getSpuSaleAttrBySpuIdAndSkuId(@PathVariable("spuId") Long spuId,
                                                            @PathVariable("skuId") Long skuId);
+
+
+    @GetMapping("json/{spuId}")
+    List<AttrValueJsonVO> getAttrValueJsonVOList(@PathVariable("spuId") Long spuId);
 }

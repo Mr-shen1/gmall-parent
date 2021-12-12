@@ -44,4 +44,15 @@
         where ssav.spu_id = #{spuId}
         order by ssav.id
     </select>
+
+
+
+    <select id="getAttrValueJsonVOList" resultType="com.atguigu.gmall.model.api.AttrValueJsonVO">
+        SELECT group_concat(sale_attr_value_id SEPARATOR '|') value_id, sku_id
+        FROM sku_sale_attr_value
+        where spu_id = #{spuId}
+        group by sku_id
+
+
+    </select>
 </mapper>

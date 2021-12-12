@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.api;
 
+import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -74,5 +75,11 @@ public class SkuDetailApiController {
     public List<SpuSaleAttr> getSpuSaleAttrBySpuIdAndSkuId(@PathVariable("spuId") Long spuId,
                                                            @PathVariable("skuId") Long skuId) {
         return spuSaleAttrService.getSpuSaleAttrBySpuIdAndSkuId(spuId, skuId);
+    }
+
+
+    @GetMapping("json/{spuId}")
+    public List<AttrValueJsonVO> getAttrValueJsonVOList(@PathVariable("spuId") Long spuId) {
+        return spuSaleAttrService.getAttrValueJsonVOList(spuId);
     }
 }

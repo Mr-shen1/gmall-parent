@@ -38,4 +38,11 @@ public class RedisConst {
     public static final int SECKILL__TIMEOUT = 60 * 60 * 1;
 
 
+    public static final String INDEX_CACHE_PREFIX = "index:cache:";
+
+    public static final String CATEGORY = "categories";
+
+    public static final Long INDEX_CACHE_TIMEOUT = 60 * 60 * 24 * 2L;
+
+    public static final String LOCK_PREFIX = "lock:";
 }

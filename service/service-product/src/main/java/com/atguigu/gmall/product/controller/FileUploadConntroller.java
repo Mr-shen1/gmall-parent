@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date: 2021/12/07
  */
 @RestController
-@RequestMapping("//admin/product")
+@RequestMapping("/admin/product")
 public class FileUploadConntroller {
 
 
@@ -27,7 +27,6 @@ public class FileUploadConntroller {
 
     public Result uploadLogo(@RequestPart("file") MultipartFile file) {
         String path = fileUploadService.uploadLogo(file);
-
         return Result.ok(path);
     }
 }

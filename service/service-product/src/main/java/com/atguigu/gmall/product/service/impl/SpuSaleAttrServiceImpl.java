@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
 import com.atguigu.gmall.product.service.SpuSaleAttrService;
@@ -32,5 +33,11 @@ public class SpuSaleAttrServiceImpl extends ServiceImpl<SpuSaleAttrMapper, SpuSa
     public List<SpuSaleAttr> getSpuSaleAttrBySpuIdAndSkuId(Long spuId, Long skuId) {
         return spuSaleAttrMapper.getSpuSaleAttrBySpuIdAndSkuId(spuId, skuId);
 
+    }
+
+    @Override
+    public List<AttrValueJsonVO> getAttrValueJsonVOList(Long spuId) {
+
+        return spuSaleAttrMapper.getAttrValueJsonVOList(spuId);
     }
 }
