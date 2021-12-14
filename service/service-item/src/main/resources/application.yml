@@ -3,6 +3,30 @@ server:
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+  redis:
+    host: 192.168.112.130
+    port: 6379
+    password: skf123!@!
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+service:
+  bloom:
+    config:
+      sku:
+        bloom-name: "sku-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?
+      spu:
+        bloom-name: "spu-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?
+
+logging:
+  level:
+    root: ERROR

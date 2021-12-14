@@ -39,10 +39,23 @@ public class RedisConst {
 
 
     public static final String INDEX_CACHE_PREFIX = "index:cache:";
+    public static final String SKU_CACHE_PREFIX = "sku:cache:";
 
     public static final String CATEGORY = "categories";
+    public static final String ITEMS_PREFIX = "items:";
 
     public static final Long INDEX_CACHE_TIMEOUT = 60 * 60 * 24 * 2L;
+    public static final Long NULL_TIMEOUT = 60 * 30L;
 
     public static final String LOCK_PREFIX = "lock:";
+    public static final String BLOOM_REBUILD_LOCK = "bloom_filter_rebuild";
+    public static final Long BLOOM_REBUILD_REBUILD_TIME = 60 * 60 * 24L;
+    public static final String BLOOM_STATUS = "bloom:filter:rebuild:status";
+    public static final String SKU_LOCK = "sku:";
+    public static final String SKU_BLOOM_FILTER = "sku_bloom_filter";
+
+
+
+
+
 }

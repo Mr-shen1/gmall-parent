@@ -17,6 +17,7 @@ public interface BaseCategory1Service extends IService<BaseCategory1> {
 
     /**
      * 获取所有的分类信息
+     *
      * @return
      */
     List<CategoryVO> getAllCategoryFromDB() throws JsonProcessingException;
@@ -24,8 +25,16 @@ public interface BaseCategory1Service extends IService<BaseCategory1> {
 
     /**
      * 加缓存
+     *
      * @return
      * @throws JsonProcessingException
      */
-    List<CategoryVO> getCategoryAllByCache (String token) throws JsonProcessingException, InterruptedException;
+    List<CategoryVO> getCategoryAllByCache(String token) throws JsonProcessingException, InterruptedException;
+
+    /**
+     * 基于分布式锁实现缓存
+     * @return
+     * @throws Exception
+     */
+    List<CategoryVO> getCategoryAllInCacheByRedisson() throws Exception;
 }

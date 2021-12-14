@@ -18,4 +18,13 @@ public interface SkuDetailService {
      * @return
      */
     Map<String, Object> getSkuDeatail(Long skuId) throws JsonProcessingException;
+
+
+    /**
+     * 从缓存中获取item信息
+     * @param skuId
+     * @return
+     * @throws Exception
+     */
+    Map<String, Object> getSkuDeatailFromCache(Long skuId) throws Exception;
 }

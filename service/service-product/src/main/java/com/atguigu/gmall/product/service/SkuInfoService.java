@@ -31,4 +31,9 @@ public interface SkuInfoService extends IService<SkuInfo> {
      * @return
      */
     BigDecimal getSkuPriceById(Long skuId);
+
+    /**
+     * 重建布隆过滤器
+     */
+    void rebuildBloomFilter();
 }

@@ -23,4 +23,26 @@ service:
     accessKey: mall
     secretKey: mall123456
     bucketName: mall0624
+  bloom:
+    config:
+      sku:
+        bloom-name: "sku-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?
+      spu:
+        bloom-name: "spu-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?
+
+logging:
+  level:
+    root: ERROR  #默认的日志等级   从小到大 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+
+
+
+
+
+
 
