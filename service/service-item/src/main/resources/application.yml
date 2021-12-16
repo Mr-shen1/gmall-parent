@@ -8,12 +8,20 @@ spring:
     host: 192.168.112.130
     port: 6379
     password: skf123!@!
+  profiles:
+    active: dev
 
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 service:
+  thread-pool:
+    core-pool-size: 8
+    maximum-pool-size: 32
+    keep-alive-time: 60 # 默认为秒
+    name: "item-thread-pool-"
+
   bloom:
     config:
       sku:
@@ -26,7 +34,6 @@ service:
         expected-insertions: 1000000
         false-probability: 0.0001
         sku-rebild-cron: 0 0 3 */3 * ?
-
 logging:
   level:
-    root: ERROR
+    root: INFO

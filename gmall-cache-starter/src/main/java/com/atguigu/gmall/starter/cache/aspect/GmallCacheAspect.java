@@ -46,7 +46,7 @@ public class GmallCacheAspect {
         this.redisTemplate = redisTemplate;
     }
 
-    // 基于注解实现切入点
+    // 基于注解实现切入点, 切入标注了该注解的方法
     @Around("@annotation(com.atguigu.gmall.starter.cache.annotation.GmallCache)")
     public Object aroundCache(ProceedingJoinPoint proceedingJoinPoint) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -58,7 +58,7 @@ public class GmallCacheAspect {
         String cacheKey = parseException(proceedingJoinPoint);
         // 获取lockKey
         String lockKey = cacheKey + LOCK_SUFFIX;
-        // 获取bloomKey
+        // 获取bloomName
         String bloomName = getBloomKName(proceedingJoinPoint);
 
 
@@ -67,9 +67,11 @@ public class GmallCacheAspect {
         //1 确定缓存中是否存在
         String cacheKeyResult = redisTemplate.opsForValue().get(cacheKey);
         if (cacheKeyResult == null) {
+            // 缓存中没有
 
             // 检测程序员是否添加了布隆
             BloomOptions bloomOptions = getBloomOptions(proceedingJoinPoint);
+            // 注解没有添加属性的话, 名字默认为""
             if (!Objects.equals(bloomOptions.bloomName(), "")) {
 
                 // 获取布隆要查的内容
@@ -77,14 +79,15 @@ public class GmallCacheAspect {
 
                 // 创建布隆并查询, 查布隆
                 RBloomFilter<Object> bloom = redissonClient.getBloomFilter(bloomName);
+
                 if (!bloom.contains(checked)) {
+                    //布隆中没有
                     return null;
                 }
 
             }
 
-            // 缓存中没有
-            // 布隆中没有, 或者没有布隆
+            //  程序员没有配布隆, 获取布隆中存在
             boolean locked = false;
             try {
                 lock = redissonClient.getLock(lockKey);
@@ -121,11 +124,12 @@ public class GmallCacheAspect {
                 throw new RuntimeException(e);
             } finally {
 
+                // 如果有锁, 则解锁
                 if (locked) {
                     try {
                         lock.unlock();
                     } catch (Exception e) {
-                        log.warn("解锁失败", e);
+                        log.error("aroundCache() called with exception => 【proceedingJoinPoint = {}】",proceedingJoinPoint,e);
                     }
 
                 }
@@ -147,7 +151,7 @@ public class GmallCacheAspect {
         //1、获取当前目标方法的@GmallCache
         GmallCache cache = AnnotationUtils.findAnnotation(method, GmallCache.class);
 
-        //得到布隆设置
+        //得到布隆设置信息
         return cache.bloomOptions();
     }
 
@@ -164,7 +168,7 @@ public class GmallCacheAspect {
         Method method = signature.getMethod();
 
         GmallCache annotation = AnnotationUtils.findAnnotation(method, GmallCache.class);
-        // 获取exp
+        // 获取布隆要查的值
         String exp = annotation.bloomOptions().bloomExp();
 
         SpelExpressionParser parser = new SpelExpressionParser();
@@ -193,7 +197,7 @@ public class GmallCacheAspect {
 
 
     /**
-     * 获取bloomkey
+     * 获取bloomKey
      *
      * @param proceedingJoinPoint
      * @return
@@ -223,6 +227,7 @@ public class GmallCacheAspect {
         Method method = methodSignature.getMethod();
         // 拿到目标方法标注的注解
         //GmallCache cache = method.getDeclaredAnnotation(GmallCache.class);
+        // AnnotationUtils工具类
         GmallCache cache = AnnotationUtils.findAnnotation(method, GmallCache.class);
         // 获取方法的cacheKey
         String cacheKey = cache.cacheKey();

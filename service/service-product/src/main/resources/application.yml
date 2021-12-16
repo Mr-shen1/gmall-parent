@@ -12,6 +12,8 @@ spring:
     host: 192.168.112.130
     port: 6379
     password: skf123!@!
+  profiles:
+    active: dev
 
 mybatis-plus:
   configuration:
@@ -35,10 +37,18 @@ service:
         expected-insertions: 1000000
         false-probability: 0.0001
         sku-rebild-cron: 0 0 3 */3 * ?
+#  thread-pool:
+#    core-pool-size: 8
+#    maximum-pool-size: 32
+#    keep-alive-time: 60 # 默认为秒
+#    name: "product-thread-pool-"
+
+
+
 
 logging:
   level:
-    root: ERROR  #默认的日志等级   从小到大 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    root: INFO  #默认的日志等级   从小到大 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 
 
 

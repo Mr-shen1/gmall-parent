@@ -27,4 +27,11 @@ public interface SkuDetailService {
      * @throws Exception
      */
     Map<String, Object> getSkuDeatailFromCache(Long skuId) throws Exception;
+
+    /**
+     * 异步方式获取详情信息
+     * @param skuId
+     * @return
+     */
+    Map<String, Object> getSkuDeatailAsync(Long skuId);
 }

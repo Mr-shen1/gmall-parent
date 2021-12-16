@@ -14,6 +14,7 @@ import com.atguigu.gmall.starter.cache.annotation.GmallCache;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -21,12 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,6 +40,8 @@ import java.util.concurrent.TimeUnit;
  * @date: 2021/12/10
  */
 @Service
+@Slf4j
+@Transactional
 public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
@@ -51,14 +57,82 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     private RBloomFilter<Object> rBloomFilter;
 
+    //@Qualifier("itemThreadPool")
+    @Autowired
+    private ThreadPoolExecutor executor;
 
     @GmallCache(cacheKey = RedisConst.SKU_CACHE_PREFIX + "#{#args[0]}",
-                lockOptions = @BizLockOptions(lockTime = 3, lockReleaseTime = 6),
-                bloomOptions = @BloomOptions(bloomName = "sku-bloom", bloomExp = "#{#args[0]}")
-                )
+            lockOptions = @BizLockOptions(lockTime = 3, lockReleaseTime = 6),
+            bloomOptions = @BloomOptions(bloomName = "sku-bloom", bloomExp = "#{#args[0]}"))
+    @Override
+    public Map<String, Object> getSkuDeatailAsync(Long skuId) {
+        log.info("getSkuDeatailAsync() called with parameters => 【skuId = {}】", skuId);
+        Map<String, Object> map = new HashMap<>();
+
+        // 异步查询skuInfo信息
+        CompletableFuture<SkuInfo> skuInfoFuture = CompletableFuture.supplyAsync(() -> {
+            SkuInfo skuInfo = productFeignClient.getSkuInfo(skuId);
+            map.put("skuInfo", skuInfo);
+            return skuInfo;
+        }, executor);
+
+        // 查询skuInfo中的图片信息
+        CompletableFuture<Void> skuImageFuture = skuInfoFuture.thenAcceptAsync(skuInfo -> {
+            List<SkuImage> skuImageList = productFeignClient.getSkuImageList(skuId);
+            skuInfo.setSkuImageList(skuImageList);
+        }, executor);
+
+        CompletableFuture<BigDecimal> priceFuture = CompletableFuture.supplyAsync(() -> {
+
+            BigDecimal price = productFeignClient.getSkuPriceById(skuId);
+            map.put("price", price);
+            return price;
+        }, executor);
+
+
+        CompletableFuture<BaseCategoryView> categoryViewFuture = skuInfoFuture.thenApplyAsync(skuInfo -> {
+            BaseCategoryView categoryView = productFeignClient.getCategoryView(skuInfo.getCategory3Id());
+            map.put("categoryView", categoryView);
+            return categoryView;
+        }, executor);
+
+        //获取销售属性列表
+        CompletableFuture<List<SpuSaleAttr>> spuSaleAttrFuture = skuInfoFuture.thenApplyAsync(skuInfo -> {
+            List<SpuSaleAttr> spuSaleAttr = productFeignClient.getSpuSaleAttrBySpuIdAndSkuId(skuInfo.getSpuId(), skuId);
+            map.put("spuSaleAttrList", spuSaleAttr);
+            return spuSaleAttr;
+        }, executor);
+
+        //获取销售属性切换所需的信息
+
+        CompletableFuture<List<AttrValueJsonVO>> jsonResultFuture = skuInfoFuture.thenApplyAsync(skuInfo -> {
+            List<AttrValueJsonVO> jsonResult = productFeignClient.getAttrValueJsonVOList(skuInfo.getSpuId());
+
+            map.put("valuesSkuJson", jsonResult);
+            return jsonResult;
+        }, executor);
+
+        CompletableFuture.allOf(skuInfoFuture,
+                skuImageFuture,
+                jsonResultFuture,
+                spuSaleAttrFuture,
+                categoryViewFuture,
+                priceFuture).join();
+
+        log.info("getSkuDeatailAsync() returned: " + map);
+
+        return map;
+
+
+    }
+
+
+    @GmallCache(cacheKey = RedisConst.SKU_CACHE_PREFIX + "#{#args[0]}",
+            lockOptions = @BizLockOptions(lockTime = 3, lockReleaseTime = 6),
+            bloomOptions = @BloomOptions(bloomName = "sku-bloom", bloomExp = "#{#args[0]}")
+    )
     @Override
     public Map<String, Object> getSkuDeatail(Long skuId) throws JsonProcessingException {
-
         Map<String, Object> map = new HashMap<>();
         // 查询价格
         BigDecimal price = productFeignClient.getSkuPriceById(skuId);
@@ -130,6 +204,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
                     // 判断布隆过滤器中是否存在
                     boolean exist = rBloomFilter.contains(skuId.toString());
                     if (!exist) {
+
                         return null;
                     }
 
@@ -141,18 +216,17 @@ public class SkuDetailServiceImpl implements SkuDetailService {
                     }
                     // 存入缓存
                     redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(skuDeatail), ttl, TimeUnit.SECONDS);
-
                     return skuDeatail;
 
                 } else {
                     return objectMapper.readValue(cacheResult, new TypeReference<Map<String, Object>>() {
                     });
+
                 }
-            }finally {
+            } finally {
                 try {
                     lock.unlock();
                 } catch (Exception e) {
-
                 }
             }
 
@@ -163,4 +237,6 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
         }
     }
+
+
 }

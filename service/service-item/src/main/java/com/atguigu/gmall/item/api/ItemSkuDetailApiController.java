@@ -26,10 +26,12 @@ public class ItemSkuDetailApiController {
     @GetMapping("/sku/detail/{skuId}")
     Map<String, Object> skuDetail(@PathVariable("skuId") Long skuId) throws Exception {
         //Map<String, Object> data = skuDetailService.getSkuDeatailFromCache(skuId);
-        Map<String, Object> data = skuDetailService.getSkuDeatail(skuId);
+        //Map<String, Object> data = skuDetailService.getSkuDeatail(skuId);
+        Map<String, Object> data = skuDetailService.getSkuDeatailAsync(skuId);
+
 
 
         return data;
-    }
 
+    }
 }

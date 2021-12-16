@@ -1,7 +1,7 @@
 package com.atguigu.gmall.starter.cache.annotation;
 
 /**
- * desc:
+ * desc: 定义布隆的名字和需要查的值
  *
  * @author: skf
  * @date: 2021/12/14
