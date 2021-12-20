@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @date: 2021/12/10
  */
 @Configuration
-@EnableFeignClients(basePackages = {"com.atguigu.gmall.item.client"})
+@EnableFeignClients(basePackages = {"com.atguigu.gmall.client.item", "com.atguigu.gmall.client.list"})
 public class WebConfig {
 
 

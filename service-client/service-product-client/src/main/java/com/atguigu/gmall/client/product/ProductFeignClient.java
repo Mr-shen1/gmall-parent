@@ -1,4 +1,4 @@
-package com.atguigu.gmall.product.client;
+package com.atguigu.gmall.client.product;
 
 import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.api.CategoryVO;

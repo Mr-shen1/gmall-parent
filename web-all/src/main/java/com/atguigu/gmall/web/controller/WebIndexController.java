@@ -1,7 +1,7 @@
 package com.atguigu.gmall.web.controller;
 
 
-import com.atguigu.gmall.item.client.ItemFeignClient;
+import com.atguigu.gmall.client.item.ItemFeignClient;
 import com.atguigu.gmall.model.api.CategoryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

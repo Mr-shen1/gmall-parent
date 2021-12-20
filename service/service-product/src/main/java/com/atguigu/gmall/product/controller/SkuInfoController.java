@@ -9,7 +9,9 @@ import com.atguigu.gmall.product.service.SpuImageService;
 import com.atguigu.gmall.product.service.SpuSaleAttrService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,10 @@ public class SkuInfoController {
     @Autowired
     private SkuInfoService skuInfoService;
 
+    @Qualifier("skuBloomFilter")
+    @Autowired
+    private RBloomFilter<Object> rBloomFilter;
+
     @GetMapping("/spuImageList/{spuId}")
     public Result getSpuImageList(@PathVariable("spuId") Long spuId) {
         QueryWrapper<SpuImage> wrapper = new QueryWrapper<>();
@@ -47,7 +53,11 @@ public class SkuInfoController {
 
     @PostMapping("/saveSkuInfo")
     public Result saveSkuInfo(@RequestBody SkuInfo skuInfo) {
+        // 将skuId添加到布隆中
         skuInfoService.saveSkuInfo(skuInfo);
+
+        Long skuId = skuInfo.getId();
+        rBloomFilter.add(skuId.toString());
         return Result.ok();
     }
 

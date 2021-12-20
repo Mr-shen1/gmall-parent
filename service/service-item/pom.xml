@@ -17,6 +17,12 @@
     <description>service-item</description>
 
     <dependencies>
+         <!-- 调用list -->
+        <dependency>
+            <groupId>com.atguigu.gmall</groupId>
+            <artifactId>service-list-client</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!--引入, 调用product-->
         <dependency>
             <groupId>com.atguigu.gmall</groupId>

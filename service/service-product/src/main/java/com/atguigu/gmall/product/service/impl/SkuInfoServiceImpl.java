@@ -1,6 +1,8 @@
 package com.atguigu.gmall.product.service.impl;
 
 import com.atguigu.gmall.common.constant.RedisConst;
+import com.atguigu.gmall.client.list.SkuEsListFeignClient;
+import com.atguigu.gmall.model.list.Goods;
 import com.atguigu.gmall.model.product.SkuAttrValue;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -10,6 +12,7 @@ import com.atguigu.gmall.product.service.SkuAttrValueService;
 import com.atguigu.gmall.product.service.SkuImageService;
 import com.atguigu.gmall.product.service.SkuInfoService;
 import com.atguigu.gmall.product.service.SkuSaleAttrValueService;
+import com.atguigu.gmall.starter.cache.core.DbCacheConsensusService;
 import com.atguigu.gmall.starter.redisson.properties.BloomFilterProperties;
 import com.atguigu.gmall.starter.redisson.properties.BloomProperty;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -58,6 +61,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     private RedissonClient redissonClient;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private DbCacheConsensusService dbCacheConsensusService;
+
+    @Autowired
+    private SkuEsListFeignClient skuEsListFeignClient;
 
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
@@ -95,13 +103,31 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
     }
 
+    @Transactional
     @Override
-    public void updateSaleStatus(Long skuId, int i) {
+    public void updateSaleStatus(Long skuId, int status) {
         QueryWrapper<SkuInfo> wrapper = new QueryWrapper<>();
         wrapper.eq("id", skuId);
         SkuInfo skuInfo = baseMapper.selectOne(wrapper);
-        skuInfo.setIsSale(i);
+        skuInfo.setIsSale(status);
         baseMapper.updateById(skuInfo);
+
+        // 延迟双删
+        dbCacheConsensusService.delayDoubleDelete(RedisConst.SKU_CACHE_PREFIX + skuId);
+
+
+        // 商品上下架
+        if (status == 1) {
+            // 上架
+            Goods goods = skuInfoMapper.getSkuInfo2Goods(skuId);
+            skuEsListFeignClient.upSkuInfo(goods);
+        } else {
+            // 下架
+            skuEsListFeignClient.downSkuInfo(skuId);
+
+        }
+
+
     }
 
     @Override
@@ -136,7 +162,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             rBloomFilter.tryInit(skuBloomProperty.getExpectedInsertions(), skuBloomProperty.getFalseProbability());
             // 3 查数据库, 添加到布隆过滤器
             List<String> skuIds = skuInfoMapper.selectAllIds();
-            for (String skuId : skuIds) {// 同意存String类型的数据
+            for (String skuId : skuIds) {// 统一存String类型的数据
                 rBloomFilter.add(skuId);
             }
 

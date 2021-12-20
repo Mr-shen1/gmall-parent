@@ -44,7 +44,7 @@ public class RedissonAutoConfiguration {
                 .setPassword(redisProperties.getPassword());
         RedissonClient redissonClient = Redisson.create(config);
 
-        log.error("RedissonClient ,{}, 获取到了", redissonClient);
+        //log.error("RedissonClient ,{}, 获取到了", redissonClient);
         return redissonClient;
     }
 
@@ -65,7 +65,7 @@ public class RedissonAutoConfiguration {
         RBloomFilter<Object> bloomFilter = redisClient.getBloomFilter(skuBloomProperty.getBloomName());
 
         boolean b = bloomFilter.tryInit(skuBloomProperty.getExpectedInsertions(), skuBloomProperty.getFalseProbability());
-        log.error("skuBloomFilter ,{}, 获取到了", bloomFilter);
+        //log.error("skuBloomFilter ,{}, 获取到了", bloomFilter);
         return bloomFilter;
     }
 
@@ -89,7 +89,7 @@ public class RedissonAutoConfiguration {
         boolean b = bloomFilter.tryInit(skuBloomProperty.getExpectedInsertions(), skuBloomProperty.getFalseProbability());
 
 
-        log.error("spuBloomFilter ,{}, 获取到了", bloomFilter);
+        //log.error("spuBloomFilter ,{}, 获取到了", bloomFilter);
         return bloomFilter;
     }
 }

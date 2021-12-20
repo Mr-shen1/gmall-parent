@@ -1,8 +1,8 @@
 package com.atguigu.gmall.item.service.impl;
 
+import com.atguigu.gmall.client.product.ProductFeignClient;
 import com.atguigu.gmall.item.service.IndexService;
 import com.atguigu.gmall.model.api.CategoryVO;
-import com.atguigu.gmall.product.client.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -13,6 +13,7 @@
     <modules>
         <module>service-product-client</module>
         <module>service-item-client</module>
+        <module>service-list-client</module>
     </modules>
 
     <artifactId>service-client</artifactId>
@@ -22,7 +23,7 @@
 
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-util</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

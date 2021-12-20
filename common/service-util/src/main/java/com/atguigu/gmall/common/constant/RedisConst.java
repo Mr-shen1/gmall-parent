@@ -54,7 +54,7 @@ public class RedisConst {
     public static final String SKU_LOCK = "sku:";
     public static final String SKU_BLOOM_FILTER = "sku_bloom_filter";
 
-
+    public static final String SKU_HOT_SCORE = "sku:hotscore";
 
 
 

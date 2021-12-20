@@ -1,5 +1,6 @@
 package com.atguigu.gmall.item.service.impl;
 
+import com.atguigu.gmall.client.product.ProductFeignClient;
 import com.atguigu.gmall.common.constant.RedisConst;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.api.AttrValueJsonVO;
@@ -7,7 +8,6 @@ import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
-import com.atguigu.gmall.product.client.ProductFeignClient;
 import com.atguigu.gmall.starter.cache.annotation.BizLockOptions;
 import com.atguigu.gmall.starter.cache.annotation.BloomOptions;
 import com.atguigu.gmall.starter.cache.annotation.GmallCache;
@@ -119,18 +119,19 @@ public class SkuDetailServiceImpl implements SkuDetailService {
                 categoryViewFuture,
                 priceFuture).join();
 
-        log.info("getSkuDeatailAsync() returned: " + map);
 
+
+        log.info("getSkuDeatailAsync() returned: " +  map);
         return map;
 
 
     }
 
 
-    @GmallCache(cacheKey = RedisConst.SKU_CACHE_PREFIX + "#{#args[0]}",
-            lockOptions = @BizLockOptions(lockTime = 3, lockReleaseTime = 6),
-            bloomOptions = @BloomOptions(bloomName = "sku-bloom", bloomExp = "#{#args[0]}")
-    )
+    //@GmallCache(cacheKey = RedisConst.SKU_CACHE_PREFIX + "#{#args[0]}",
+    //        lockOptions = @BizLockOptions(lockTime = 3, lockReleaseTime = 6),
+    //        bloomOptions = @BloomOptions(bloomName = "sku-bloom", bloomExp = "#{#args[0]}")
+    //)
     @Override
     public Map<String, Object> getSkuDeatail(Long skuId) throws JsonProcessingException {
         Map<String, Object> map = new HashMap<>();

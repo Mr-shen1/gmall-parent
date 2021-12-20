@@ -36,4 +36,44 @@
         select id
         from sku_info
     </select>
+
+
+    <resultMap id="goodsMap" type="com.atguigu.gmall.model.list.Goods" autoMapping="true">
+        <id property="id" column="id"></id>
+        <collection property="attrs" ofType="com.atguigu.gmall.model.list.SearchAttr" autoMapping="true">
+            <id property="attrId" column="attrId"></id>
+        </collection>
+    </resultMap>
+
+    <select id="getSkuInfo2Goods" resultMap="goodsMap">
+
+        select
+            sku.id id,
+            sku.sku_default_img defaultImg,
+            sku.sku_name title,
+            sku.price price,
+            current_timestamp() createTime,
+            sku.tm_id tmId,
+            bt.tm_name tmName,
+            bt.logo_url tmLogoUrl,
+            bcv.category1_id category1Id,
+            bcv.category1_name category1Name,
+            bcv.category2_id category2Id,
+            bcv.category2_name category2Name,
+            bcv.category3_id category3Id,
+            bcv.category3_name category3Name,
+            sav.attr_id attrId,
+            bav.value_name attrValue,
+            bai.attr_name attrName
+
+        from sku_info sku
+                 left join base_trademark bt on sku.tm_id = bt.id
+                 left join base_category_view bcv on sku.category3_id = bcv.category3_id
+
+                 left join sku_attr_value sav on sku.id = sav.sku_id
+
+                 left join base_attr_info bai on bai.id = sav.attr_id
+                 left join base_attr_value bav on bav.id = sav.value_id
+        where sku.id = #{skuId}
+    </select>
 </mapper>

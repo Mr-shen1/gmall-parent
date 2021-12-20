@@ -76,7 +76,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         }).collect(Collectors.toList());
         spuSaleAttrService.saveBatch(spuSaleAttrResultList);
 
-
         //4 SpuSaleValue信息
         List<SpuSaleAttrValue> collect = spuSaleAttrList.stream().flatMap((ele) -> {
             return ele.getSpuSaleAttrValueList().stream().map((e1) -> {

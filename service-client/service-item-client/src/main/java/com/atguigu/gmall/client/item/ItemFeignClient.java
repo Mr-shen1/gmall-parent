@@ -1,4 +1,4 @@
-package com.atguigu.gmall.item.client;
+package com.atguigu.gmall.client.item;
 
 import com.atguigu.gmall.model.api.CategoryVO;
 import org.springframework.cloud.openfeign.FeignClient;

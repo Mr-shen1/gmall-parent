@@ -1,11 +1,11 @@
 package com.atguigu.gmall.item;
 
+import com.atguigu.gmall.client.product.ProductFeignClient;
 import com.atguigu.gmall.model.api.AttrValueJsonVO;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
-import com.atguigu.gmall.product.client.ProductFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

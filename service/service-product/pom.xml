@@ -13,6 +13,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.atguigu.gmall</groupId>
+            <artifactId>service-list-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>

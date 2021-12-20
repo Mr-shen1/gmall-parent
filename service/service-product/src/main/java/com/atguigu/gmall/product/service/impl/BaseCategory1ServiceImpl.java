@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @date: 2021/12/06
  */
 @Service
+@Slf4j
 public class BaseCategory1ServiceImpl extends ServiceImpl<BaseCategory1Mapper, BaseCategory1> implements BaseCategory1Service {
 
     //public static final String CATEGORY_ALL = "categoryAll";
@@ -122,6 +124,8 @@ public class BaseCategory1ServiceImpl extends ServiceImpl<BaseCategory1Mapper, B
     }
 
     private List<CategoryVO> getCategoryMineByHand(String token) throws JsonProcessingException, InterruptedException {
+
+
         String cacheKey = RedisConst.INDEX_CACHE_PREFIX + RedisConst.CATEGORY;
         //String lockValue = UUID.randomUUID().toString();
 
