@@ -1,0 +1,18 @@
+server:
+  port: 12000
+
+
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://121.196.198.8:3306/gmall_user?useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 192.168.112.130
+    port: 6379
+    password: skf123!@!
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true

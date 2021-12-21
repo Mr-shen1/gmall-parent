@@ -20,7 +20,7 @@ import java.util.Map;
  * @date: 2021/12/17
  */
 @Controller
-public class ListController {
+public class WebListController {
 
     @Autowired
     private SearchEsListFeignClient searchEsListFeignClient;

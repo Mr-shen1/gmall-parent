@@ -133,7 +133,7 @@
 						//	originUrl = 记录用户在哪点击的登录url ，当用户登录成功之后，又跳转到了原来的url！
                         console.log("originUrl:"+this.originUrl);
                         if(this.originUrl == ''){
-                            window.location.href="http://www.gmall.com/index.html"
+                            window.location.href="http://www.gmall.com"
                             return ;
                         } else {
                             window.location.href = decodeURIComponent(this.originUrl)

@@ -71,9 +71,11 @@ public class SearchServiceImpl implements SearchService {
         // 2 Goods信息
         List<Goods> goodsList = new ArrayList<>();
         List<SearchHit<Goods>> searchHits = hits.getSearchHits();
+
         for (SearchHit<Goods> searchHit : searchHits) {
             Goods goods = searchHit.getContent();
             if (!StringUtils.isEmpty(searchParam.getKeyword())) {
+
                 List<String> highlightField = searchHit.getHighlightField("title");
                 goods.setTitle(highlightField.get(0));
             }

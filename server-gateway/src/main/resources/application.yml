@@ -10,10 +10,10 @@ spring:
           predicates:
             - Path=/admin/product/**
 
-#        - id: service-item
-#          uri: lb://service-item
-#          predicates:
-#            - Path=/api/item/**
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+            - Path=/api/user/**
 
         - id: web-all
           uri: lb://web-all
@@ -26,3 +26,10 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
+
+
+auth-urls:
+  auth:
+    - /submitOrder/**
+    - /api/order/**   #/api/order/orderlist/inner
+  login-url: http://passport.gmall.com/login.html

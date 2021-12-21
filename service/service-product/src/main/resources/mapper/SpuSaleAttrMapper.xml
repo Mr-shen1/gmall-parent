@@ -54,5 +54,7 @@
         group by sku_id
 
 
+
+
     </select>
 </mapper>

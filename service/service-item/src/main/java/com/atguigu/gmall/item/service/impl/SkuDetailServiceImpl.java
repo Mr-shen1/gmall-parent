@@ -108,7 +108,19 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         CompletableFuture<List<AttrValueJsonVO>> jsonResultFuture = skuInfoFuture.thenApplyAsync(skuInfo -> {
             List<AttrValueJsonVO> jsonResult = productFeignClient.getAttrValueJsonVOList(skuInfo.getSpuId());
 
-            map.put("valuesSkuJson", jsonResult);
+            Map<String, String> jsonMap = new HashMap<>();
+            for (AttrValueJsonVO jsonVO : jsonResult) {
+
+                jsonMap.put(jsonVO.getValueID(), jsonVO.getSkuID());
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonStrResult = null;
+            try {
+                jsonStrResult = objectMapper.writeValueAsString(jsonMap);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            map.put("valuesSkuJson", jsonStrResult);
             return jsonResult;
         }, executor);
 
