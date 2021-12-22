@@ -20,7 +20,7 @@ public class CartInfo extends BaseEntity {
     @TableField("user_id")
     private String userId;
 
-    @ApiModelProperty(value = "skuid")
+    @ApiModelProperty(value = "skuId")
     @TableField("sku_id")
     private Long skuId;
 

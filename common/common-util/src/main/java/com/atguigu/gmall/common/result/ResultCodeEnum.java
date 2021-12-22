@@ -13,6 +13,8 @@ public enum ResultCodeEnum {
     FAIL(201, "失败"),
     SERVICE_ERROR(2012, "服务异常"),
 
+    CART_OVERFLOW_MAXSIZE(301, "超过购物车最大数量"),
+
     PAY_RUN(205, "支付中"),
 
     LOGIN_AUTH(208, "未登陆"),

@@ -1,4 +1,4 @@
-package com.atguigu.gmall.web.config;
+package com.atguigu.gmall.cart.config;
 
 import com.atguigu.gmall.common.config.FeignCommonConfig;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -9,15 +9,12 @@ import org.springframework.context.annotation.Import;
  * desc:
  *
  * @author: skf
- * @date: 2021/12/10
+ * @date: 2021/12/22
  */
 @Configuration
-@EnableFeignClients(basePackages = {"com.atguigu.gmall.client.item",
-                                    "com.atguigu.gmall.client.list",
-                                    "com.atguigu.gmall.client.cart"})
+@EnableFeignClients(basePackages = {"com.atguigu.gmall.client.product"})
 @Import(FeignCommonConfig.class)
-public class WebConfig {
-
+public class CartConfig {
 
 
 

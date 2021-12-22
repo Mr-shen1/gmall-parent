@@ -15,6 +15,11 @@ spring:
           predicates:
             - Path=/api/user/**
 
+        - id: service-cart
+          uri: lb://service-cart
+          predicates:
+            - Path=/api/cart/**
+
         - id: web-all
           uri: lb://web-all
           predicates:
@@ -26,7 +31,9 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
-
+  redis:
+    password: skf123!@!
+    host: 192.168.112.130
 
 auth-urls:
   auth:

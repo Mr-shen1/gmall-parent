@@ -50,11 +50,14 @@ public class RequestAuthFilter implements GlobalFilter {
 
     String innerPath = "/**/inner/**";
 
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         String path = request.getURI().getPath();
+
+        ServerHttpRequest.Builder reqBuilder = request.mutate();
 
         // 1拦截内部feign接口调用url
         if (antPathMatcher.match(innerPath, path)) {
@@ -81,7 +84,7 @@ public class RequestAuthFilter implements GlobalFilter {
 
         boolean authStatus = false;
         List<String> auth = filterProperties.getAuth();
-        // 校验路径是否需要登录(拦截)
+        // 2 校验路径是否需要登录(拦截)
         for (String pattern : auth) {
             authStatus = antPathMatcher.match(pattern, path);
             if (authStatus) {
@@ -89,12 +92,26 @@ public class RequestAuthFilter implements GlobalFilter {
             }
         }
 
-        // 拦截下来的, 需要登录的
+
+        // 当登录后, 访问不要求登录的页面时, 直接透传id
+        String token = getToken(request);
+        if (!StringUtils.isEmpty(token)) {
+            // 有token 获取userId
+            String userId = getUserId(token, request);
+            if (!StringUtils.isEmpty(userId)) {
+                // 透传id
+                reqBuilder.header("userId", userId);
+            } else {
+                // token 非法 重定向到登录页面
+                return redirectToLoginUrl(request, response);
+            }
+
+        }
+
+        // 2.1 拦截下来的, 需要登录的
         if (authStatus) {
             // 请求认证
-            // 1 拿到前端带来的token
-            String token = getToken(request);
-
+            //  拿到前端带来的token
             if (StringUtils.isEmpty(token)) {
                 // 没有token 直接重定向到登录页面
                 Mono<Void> mono = redirectToLoginUrl(request, response);
@@ -108,21 +125,58 @@ public class RequestAuthFilter implements GlobalFilter {
                     return redirectToLoginUrl(request, response);
                 } else {
                     // token有效 获取userId 并放在 请求头中 透传给下面
-                    // 透传 因为直接在请求头中添加会报错, 所以要构建新的请求头
-                    ServerHttpRequest req = request.mutate().header("userId", userId).build();
-                    // 重新构建新的请求对象
-                    ServerWebExchange ex = exchange.mutate().request(req).build();
-                    // 放行新的ServerWebExchange对象
-                    return chain.filter(ex);
 
+                    reqBuilder.header("userId", userId).build();
                 }
             }
         }
         //不需要登陆的
 
-        return chain.filter(exchange);
+
+        String userTempId = getUserTempId(request);
+        // 如果前端传了userTempId, 则将userTempId透传下去
+        if (!StringUtils.isEmpty(userTempId)) {
+            reqBuilder.header("userTempId", userTempId);
+        }
+
+        // 透传 因为直接在请求头中添加会报错, 所以要构建新的请求
+        ServerHttpRequest httpRequest = reqBuilder.build();
+
+        // 重新构建新的请求对象
+        // 放行新的ServerWebExchange对象
+        return chain.filter(exchange.mutate().request(httpRequest).response(response).build());
     }
 
+    /**
+     * 获取userTempId
+     *
+     * @param request
+     * @return
+     */
+    private String getUserTempId(ServerHttpRequest request) {
+        List<String> userTempIdList = request.getHeaders().get("userTempId");
+        if (!CollectionUtils.isEmpty(userTempIdList)) {
+            return userTempIdList.get(0);
+        }
+
+        List<HttpCookie> Cookies = request.getCookies().get("userTempId");
+        if (!CollectionUtils.isEmpty(Cookies)) {
+            for (HttpCookie cookie : Cookies) {
+                if (cookie.getName().equals("userTempId")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取userId
+     *
+     * @param token
+     * @param request
+     * @return
+     */
     private String getUserId(String token, ServerHttpRequest request) {
         String json = stringRedisTemplate.opsForValue().get(RedisConst.USER_LOGIN_KEY_PREFIX + token);
         if (StringUtils.isEmpty(json)) {

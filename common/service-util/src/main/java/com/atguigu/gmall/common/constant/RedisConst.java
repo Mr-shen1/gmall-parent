@@ -56,6 +56,7 @@ public class RedisConst {
 
     public static final String SKU_HOT_SCORE = "sku:hotscore";
 
+    public static final String USER_CART_KEY_PREFIX = "cart:info:";
 
-
+    public static final Long CART_MAX_SIZE = 200L;
 }

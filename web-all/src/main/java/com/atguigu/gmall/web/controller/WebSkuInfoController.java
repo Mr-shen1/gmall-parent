@@ -1,7 +1,6 @@
 package com.atguigu.gmall.web.controller;
 
 import com.atguigu.gmall.client.item.ItemFeignClient;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +22,7 @@ public class WebSkuInfoController {
     private ItemFeignClient itemFeignClient;
 
     @GetMapping("{skuId}.html")
-    public String skuDetail(@PathVariable("skuId")Long skuId, ModelMap modelMap) throws JsonProcessingException {
+    public String skuDetail(@PathVariable("skuId") Long skuId, ModelMap modelMap) {
 
         //查询sku详情信息
         Map<String, Object> map = itemFeignClient.skuDetail(skuId);
