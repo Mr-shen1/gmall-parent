@@ -36,6 +36,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Override
     public Map<String, Object> login(UserInfo userInfo, HttpServletRequest request) throws JsonProcessingException {
 
+        // 获取用户名称和密码
         String loginName = userInfo.getLoginName();
         String passwd = userInfo.getPasswd();
 
@@ -49,13 +50,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             return null;
         }
         //
-        Map<String, Object> map = token2Redis(request, userInfoResult);
-        return map;
+        return token2Redis(request, userInfoResult);
+
     }
 
 
     /**
-     * 处理token信息
+     * 处理token信息, 并返回token 和 昵称
      * @param request
      * @param userInfoResult
      * @return
@@ -68,6 +69,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
         String token = UUID.randomUUID().toString().replace("-", "") ;
         // 以token为key, 用户的id存入redis
+        // TODO <String, String> ?
         Map<Object, Object> map2Redis = new HashMap<>();
         map2Redis.put("ip", IpUtil.getIpAddress(request));
         map2Redis.put("userId", userInfoResult.getId());

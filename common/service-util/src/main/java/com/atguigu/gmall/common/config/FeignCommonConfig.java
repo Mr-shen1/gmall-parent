@@ -19,12 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 public class FeignCommonConfig {
 
     /**
+     * 因为feign在远程调用时会创建一个新的模板, 所以之前请求头中的信息就会丢失
      * 定义feign的请求拦截器, 保证 userId 和 userTempId 不丢失
+     *
      * @return
      */
     @Bean
     public RequestInterceptor getRequestInterceptor() {
-        // TODO 放到common中
+
         return (template) -> {
             // 为什么可以强转? 因为在 RequestContextListener 存的时候就是 ServletRequestAttributes 类型
 

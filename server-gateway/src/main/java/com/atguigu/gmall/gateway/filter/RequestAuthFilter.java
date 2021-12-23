@@ -82,17 +82,6 @@ public class RequestAuthFilter implements GlobalFilter {
         }
 
 
-        boolean authStatus = false;
-        List<String> auth = filterProperties.getAuth();
-        // 2 校验路径是否需要登录(拦截)
-        for (String pattern : auth) {
-            authStatus = antPathMatcher.match(pattern, path);
-            if (authStatus) {
-                break;
-            }
-        }
-
-
         // 当登录后, 访问不要求登录的页面时, 直接透传id
         String token = getToken(request);
         if (!StringUtils.isEmpty(token)) {
@@ -105,7 +94,19 @@ public class RequestAuthFilter implements GlobalFilter {
                 // token 非法 重定向到登录页面
                 return redirectToLoginUrl(request, response);
             }
+        }
 
+
+
+
+        boolean authStatus = false;
+        List<String> auth = filterProperties.getAuth();
+        // 2 校验路径是否需要登录(拦截)
+        for (String pattern : auth) {
+            authStatus = antPathMatcher.match(pattern, path);
+            if (authStatus) {
+                break;
+            }
         }
 
         // 2.1 拦截下来的, 需要登录的
@@ -130,8 +131,8 @@ public class RequestAuthFilter implements GlobalFilter {
                 }
             }
         }
-        //不需要登陆的
 
+        //不需要登陆的
 
         String userTempId = getUserTempId(request);
         // 如果前端传了userTempId, 则将userTempId透传下去

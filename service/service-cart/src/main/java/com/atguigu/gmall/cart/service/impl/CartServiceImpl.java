@@ -141,6 +141,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void mergeCart(String userId, String userTempId) throws JsonProcessingException {
+
+        // 检查合并后的数量
+        checkAllSize(userId, userTempId);
+
         if (!StringUtils.isEmpty(userId) && !StringUtils.isEmpty(userTempId)) {
             // 需要合并
             // 获取临时购物车信息
@@ -156,6 +160,24 @@ public class CartServiceImpl implements CartService {
                 stringRedisTemplate.delete(tempCartKey);
             }
         }
+    }
+
+    /**
+     * 检查合并后的数量
+     *
+     * @param userId
+     * @param userTempId
+     */
+    private void checkAllSize(String userId, String userTempId) {
+
+        // 获取数量
+        Long userIdSize = stringRedisTemplate.opsForHash().size(RedisConst.USER_CART_KEY_PREFIX + userId);
+        Long tempSize = stringRedisTemplate.opsForHash().size(RedisConst.USER_CART_KEY_PREFIX + userTempId);
+
+        if (userIdSize + tempSize > 200) {
+            throw new GmallException(ResultCodeEnum.CART_OVERFLOW_MAXSIZE);
+        }
+
     }
 
     /**
