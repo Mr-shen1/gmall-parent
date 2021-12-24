@@ -1,5 +1,6 @@
 package com.atguigu.gmall.starter.thread;
 
+import com.atguigu.gmall.starter.thread.factory.CustomerThreadFactory;
 import com.atguigu.gmall.starter.thread.properties.ThreadPoolProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class ThreadPoolAutoConfiguration {
      * @return
      */
     //"itemThreadPool"
-    @Bean
+    @Bean("itemThreadPool")
     public ThreadPoolExecutor getItemThreadPool(ThreadPoolProperties properties) {
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(properties.getCorePoolSize(),
@@ -40,25 +41,25 @@ public class ThreadPoolAutoConfiguration {
                 properties.getKeepAliveTime(),
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>(10),
-                new ItemThreadFactory(properties.getName()),
+                new CustomerThreadFactory(properties.getName()),
                 new ThreadPoolExecutor.CallerRunsPolicy());
 
-        System.out.println("getItemThreadPool创建完毕");
+        System.out.println("getItemThreadPool");
         return threadPoolExecutor;
     }
 
-    //
-    //@Bean("productThreadPool")
-    //public ThreadPoolExecutor getProductThreadPool(ThreadPoolProperties properties) {
-    //
-    //    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(properties.getCorePoolSize(),
-    //            properties.getMaximumPoolSize(),
-    //            properties.getKeepAliveTime(),
-    //            TimeUnit.SECONDS,
-    //            new LinkedBlockingDeque<>(10),
-    //            new ItemThreadFactory(properties.getName()),
-    //            new ThreadPoolExecutor.CallerRunsPolicy());
-    //
-    //    return threadPoolExecutor;
-    //}
+
+    @Bean("cartThreadPool")
+    public ThreadPoolExecutor getCartThreadPool(ThreadPoolProperties properties) {
+
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(properties.getCorePoolSize(),
+                properties.getMaximumPoolSize(),
+                properties.getKeepAliveTime(),
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(10),
+                new CustomerThreadFactory(properties.getName()),
+                new ThreadPoolExecutor.CallerRunsPolicy());
+
+        return threadPoolExecutor;
+    }
 }

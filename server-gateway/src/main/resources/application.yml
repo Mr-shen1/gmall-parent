@@ -20,6 +20,11 @@ spring:
           predicates:
             - Path=/api/cart/**
 
+        - id: service-order
+          uri: lb://service-order
+          predicates:
+            - Path=/api/order/**
+
         - id: web-all
           uri: lb://web-all
           predicates:
@@ -39,4 +44,5 @@ auth-urls:
   auth:
     - /submitOrder/**
     - /api/order/**   #/api/order/orderlist/inner
+    - /**/auth/**  # 需要登录的
   login-url: http://passport.gmall.com/login.html

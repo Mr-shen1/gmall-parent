@@ -8,3 +8,27 @@ spring:
   redis:
     host: 192.168.112.130
     password: skf123!@!
+
+
+service:
+  order:
+    timeout: 1800
+
+  thread-pool:
+    core-pool-size: 8
+    maximum-pool-size: 32
+    keep-alive-time: 60 # 默认为秒
+    name: "cart-thread-pool-"
+
+  bloom:
+    config:
+      sku:
+        bloom-name: "sku-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?
+      spu:
+        bloom-name: "spu-bloom"
+        expected-insertions: 1000000
+        false-probability: 0.0001
+        sku-rebild-cron: 0 0 3 */3 * ?

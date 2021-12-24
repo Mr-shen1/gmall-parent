@@ -57,7 +57,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     private RBloomFilter<Object> rBloomFilter;
 
-    //@Qualifier("itemThreadPool")
+    @Qualifier("itemThreadPool")
     @Autowired
     private ThreadPoolExecutor executor;
 

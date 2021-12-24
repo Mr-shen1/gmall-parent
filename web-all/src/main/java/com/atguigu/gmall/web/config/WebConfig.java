@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableFeignClients(basePackages = {"com.atguigu.gmall.client.item",
                                     "com.atguigu.gmall.client.list",
-                                    "com.atguigu.gmall.client.cart"})
+                                    "com.atguigu.gmall.client.cart",
+                                    "com.atguigu.gmall.client.order",})
 @Import(FeignCommonConfig.class)
 public class WebConfig {
 

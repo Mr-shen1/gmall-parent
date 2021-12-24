@@ -1,4 +1,4 @@
-package com.atguigu.gmall.starter.thread;
+package com.atguigu.gmall.starter.thread.factory;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author: skf
  * @date: 2021/12/15
  */
-public class ItemThreadFactory implements ThreadFactory {
+public class CustomerThreadFactory implements ThreadFactory {
     private String name;
 
-    public ItemThreadFactory(String name) {
+    public CustomerThreadFactory(String name) {
         this.name = name;
     }
 

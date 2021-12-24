@@ -1,0 +1,23 @@
+{
+  "consignee": "skf",
+  "consigneeTel": "13833456789",
+  "deliveryAddress": "武汉",
+  "paymentWay": "ONLINE",
+  "orderComment": "",
+  "orderDetailList": [
+    {
+      "id": null,
+      "orderId": null,
+      "skuId": 51,
+      "skuName": "Apple iPhone 13 (A2634) 128GB 粉色 支持移动联通电信5G 双卡双待手机",
+      "imgUrl": "http://192.168.112.130:9000/mall0624/bc2ef92fc7624e0e86a5748d627214ad_1.png",
+      "orderPrice": 2525,
+      "skuNum": 1,
+      "hasStock": "0",
+      "createTime": "2021-12-23 15:11:38",
+      "splitTotalAmount": null,
+      "splitActivityAmount": null,
+      "splitCouponAmount": null
+    }
+  ]
+}

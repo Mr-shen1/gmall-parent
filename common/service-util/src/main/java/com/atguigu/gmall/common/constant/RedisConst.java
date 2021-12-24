@@ -59,4 +59,11 @@ public class RedisConst {
     public static final String USER_CART_KEY_PREFIX = "cart:info:";
 
     public static final Long CART_MAX_SIZE = 200L;
+
+
+    // order
+    public static final String ORDER_TRADE_PREFIX = "ATGUIGU";
+
+    public static final String ORDER_TEMP_TOKEN = "order:user:token:";  //order:user:token:1  == tradeNo
+
 }

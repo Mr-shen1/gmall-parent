@@ -133,7 +133,6 @@ public class RequestAuthFilter implements GlobalFilter {
         }
 
         //不需要登陆的
-
         String userTempId = getUserTempId(request);
         // 如果前端传了userTempId, 则将userTempId透传下去
         if (!StringUtils.isEmpty(userTempId)) {

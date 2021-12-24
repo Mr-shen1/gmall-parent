@@ -11,13 +11,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +38,13 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private ProductFeignClient productFeignClient;
+
+    /**
+     * 注入线程池
+     */
+    @Autowired
+    @Qualifier("cartThreadPool")
+    private ThreadPoolExecutor executor;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -90,19 +100,51 @@ public class CartServiceImpl implements CartService {
         List<Object> cartList = stringRedisTemplate.opsForHash().values(cartKey);
         List<CartInfo> resultList = null;
         if (!CollectionUtils.isEmpty(cartList)) {
-            resultList = cartList.stream().map(e -> {
+            resultList = cartList.stream().map(ele -> {
                 CartInfo cartInfo = null;
-                String json = e.toString();
+                Long skuId = null;
+                String json = ele.toString();
                 try {
                     cartInfo = objectMapper.readValue(json, CartInfo.class);
-                } catch (JsonProcessingException jsonProcessingException) {
+
+                    skuId = cartInfo.getSkuId();
+                } catch (Exception e) {
                     log.error("cartList() called with exception => 【cartKey = {}】", cartKey, e);
                 }
+
+                //每次查看购物车时，异步查询价格
+                Long finalSkuId = skuId;
+                executor.submit(() -> {
+                    System.out.println("异步查价格");
+                    try {
+                        selectPrice(finalSkuId, cartKey);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
                 return cartInfo;
             }).sorted(((o1, o2) -> (int) (o2.getCreateTime().getTime() - o1.getCreateTime().getTime()))).collect(Collectors.toList());
 
         }
+
+
         return resultList;
+
+    }
+
+    /**
+     * 查询价格
+     *
+     * @param skuId
+     * @param cartKey
+     */
+    private void selectPrice(Long skuId, String cartKey) throws JsonProcessingException {
+        // 获取此时商品的实时价格
+        BigDecimal price = productFeignClient.getSkuPriceById(skuId);
+        CartInfo cartInfo = getCartInfo(cartKey, skuId);
+        cartInfo.setSkuPrice(price);
+        saveCartInfo(skuId, cartKey, cartInfo);
 
     }
 
@@ -162,6 +204,27 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @Override
+    public List<CartInfo> getIsChecked(String cartKey) {
+        List<Object> values = stringRedisTemplate.opsForHash().values(cartKey);
+
+        List<CartInfo> result = values.stream().map(e -> {
+            String json = e.toString();
+            CartInfo cartInfo = null;
+            try {
+                cartInfo = objectMapper.readValue(json, CartInfo.class);
+                return cartInfo;
+            } catch (JsonProcessingException jsonProcessingException) {
+                jsonProcessingException.printStackTrace();
+            }
+            return cartInfo;
+        }).filter(e -> e.getIsChecked() == 1).collect(Collectors.toList());
+
+
+        return result;
+    }
+
+
     /**
      * 检查合并后的数量
      *
@@ -184,7 +247,6 @@ public class CartServiceImpl implements CartService {
      * 获取cartInfo信息
      *
      * @param cartKey
-     * @param skuId
      * @return
      * @throws JsonProcessingException
      */

@@ -35,17 +35,21 @@ public class FeignCommonConfig {
 
             // 获取当前请求
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            HttpServletRequest request = attributes.getRequest();
-            String userId = request.getHeader("userId");
-            String userTempId = request.getHeader("userTempId");
 
-            // 将请求头信息放入模板中
-            if (!StringUtils.isEmpty(userId)) {
-                template.header("userId", userId);
-            }
+             // 如果是在异步的情况下，feign获取不到请求
+            if (attributes != null) {
+                HttpServletRequest request = attributes.getRequest();
+                String userId = request.getHeader("userId");
+                String userTempId = request.getHeader("userTempId");
 
-            if (!StringUtils.isEmpty(userTempId)) {
-                template.header("userTempId", userTempId);
+                // 将请求头信息放入模板中
+                if (!StringUtils.isEmpty(userId)) {
+                    template.header("userId", userId);
+                }
+
+                if (!StringUtils.isEmpty(userTempId)) {
+                    template.header("userTempId", userTempId);
+                }
             }
 
         };

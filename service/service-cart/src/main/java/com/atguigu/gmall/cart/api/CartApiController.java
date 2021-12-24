@@ -1,10 +1,13 @@
 package com.atguigu.gmall.cart.api;
 
 import com.atguigu.gmall.cart.service.CartService;
+import com.atguigu.gmall.model.cart.CartInfo;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * desc:
@@ -29,6 +32,14 @@ public class CartApiController {
         SkuInfo skuInfo = cartService.addCart(skuId, skuNum, cartKey);
 
         return skuInfo;
+    }
+
+    @GetMapping("/get/checked")
+    public List<CartInfo> getIsChecked(@RequestHeader(value = "userId", required = false) String userId,
+                                       @RequestHeader(value = "userTempId", required = false) String userTempId) throws JsonProcessingException {
+        String cartKey = cartService.determineCartKey(userId, userTempId);
+
+        return cartService.getIsChecked(cartKey);
     }
 
 }

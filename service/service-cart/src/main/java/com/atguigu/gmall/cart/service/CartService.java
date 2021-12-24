@@ -76,4 +76,11 @@ public interface CartService {
      * @param userTempId
      */
     void mergeCart(String userId, String userTempId) throws JsonProcessingException;
+
+    /**
+     * 获取购物车中被选中的商品
+     * @return
+     * @param cartKey
+     */
+    List<CartInfo> getIsChecked(String cartKey);
 }
