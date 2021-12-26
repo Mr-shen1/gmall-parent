@@ -1,4 +1,4 @@
-package com.atguigu.gmall.order.properties;
+package com.atguigu.gmall.order.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

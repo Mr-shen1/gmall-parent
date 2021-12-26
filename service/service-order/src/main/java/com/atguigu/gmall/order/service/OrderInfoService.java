@@ -4,6 +4,8 @@ import com.atguigu.gmall.model.api.ConfirmOrderVo;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
+
 /**
 * @author SSS
 * @description 针对表【order_info(订单表 订单表)】的数据库操作Service
@@ -35,4 +37,21 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @return
      */
     Long saveOrder(OrderInfo orderInfo, String tradeNo);
+
+    /**
+     * 根据orderId获取总金额
+     * @param orderId
+     * @return
+     */
+    BigDecimal getOrderTotalAmount(Long orderId);
+
+
+    void closeOrder(Long orderId, String orderStatus, String processStatus);
+
+    /**
+     * 获取totalAmount body 和 tradeNo
+     * @param orderId
+     * @return
+     */
+    OrderInfo getOrderInfo(Long orderId);
 }

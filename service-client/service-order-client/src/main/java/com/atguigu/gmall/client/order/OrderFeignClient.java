@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
+
 /**
  * desc:
  *
@@ -17,5 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface OrderFeignClient {
 
     @GetMapping("/orderInfo/{orderId}")
+    BigDecimal getOrderTotalAmount(@PathVariable("orderId") Long orderId);
+
+    @GetMapping("/get/orderinfo/{orderId}")
     OrderInfo getOrderInfo(@PathVariable("orderId") Long orderId);
 }

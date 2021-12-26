@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 /**
  * desc:
  *
@@ -23,7 +25,6 @@ public class OrderApiController {
     private OrderInfoService orderInfoService;
 
 
-
     @GetMapping("/checkout/cart")
     public ConfirmOrderVo checkoutCart() {
         ConfirmOrderVo confirmOrderVo = orderInfoService.checkoutCart();
@@ -33,10 +34,20 @@ public class OrderApiController {
     }
 
     @GetMapping("/orderInfo/{orderId}")
-    public OrderInfo checkoutCart(@PathVariable("orderId") Long orderId) {
+    public BigDecimal getOrderTotalAmount(@PathVariable("orderId") Long orderId) {
 
-        return orderInfoService.getById(orderId);
+        return orderInfoService.getOrderTotalAmount(orderId);
 
     }
 
+    /**
+     * 获取totalAmount body 和 tradeNo
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/get/orderinfo/{orderId}")
+    public OrderInfo getOrderInfo(@PathVariable("orderId") Long orderId) {
+       return orderInfoService.getOrderInfo(orderId);
+
+    }
 }

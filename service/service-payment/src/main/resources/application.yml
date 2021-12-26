@@ -1,0 +1,17 @@
+server:
+  port: 15000
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://121.196.198.8:3306/gmall_order?useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+alipay:
+  notify_url: http://pay.gmall.com/api/payment/paysuccess
+  return_url: http://order.gmall.com/orderList.html

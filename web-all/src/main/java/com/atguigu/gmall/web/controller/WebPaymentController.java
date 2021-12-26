@@ -8,6 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+
 /**
  * desc:
  *
@@ -24,7 +26,10 @@ public class WebPaymentController {
     @GetMapping("/pay.html")
     public String paymentPage(@RequestParam("orderId") Long orderId, ModelMap modelMap) {
 
-        OrderInfo orderInfo = orderFeignClient.getOrderInfo(orderId);
+        BigDecimal totalAmount = orderFeignClient.getOrderTotalAmount(orderId);
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setId(orderId);
+        orderInfo.setTotalAmount(totalAmount);
 
         modelMap.addAttribute("orderInfo", orderInfo);
 

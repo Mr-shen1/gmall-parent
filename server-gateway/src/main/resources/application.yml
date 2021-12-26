@@ -25,6 +25,11 @@ spring:
           predicates:
             - Path=/api/order/**
 
+        - id: service-payment
+          uri: lb://service-payment
+          predicates:
+            - Path=/api/payment/**
+
         - id: web-all
           uri: lb://web-all
           predicates:
@@ -45,4 +50,5 @@ auth-urls:
     - /submitOrder/**
     - /api/order/**   #/api/order/orderlist/inner
     - /**/auth/**  # 需要登录的
+    - /api/payment/**
   login-url: http://passport.gmall.com/login.html

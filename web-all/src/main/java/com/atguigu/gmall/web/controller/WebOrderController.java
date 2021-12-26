@@ -24,8 +24,7 @@ public class WebOrderController {
     public String checkoutCart(ModelMap modelMap) {
 
 
-        ConfirmOrderVo confirmOrderVo = new ConfirmOrderVo();
-        confirmOrderVo = orderConfirmClient.checkoutCart();
+        ConfirmOrderVo confirmOrderVo = orderConfirmClient.checkoutCart();
 
 
         modelMap.addAttribute("detailArrayList", confirmOrderVo.getDetailArrayList());
@@ -36,5 +35,10 @@ public class WebOrderController {
 
         return "order/trade";
 
+    }
+
+    @GetMapping("/orderList.html")
+    public String toOrderList() {
+        return "order/myOrder";
     }
 }

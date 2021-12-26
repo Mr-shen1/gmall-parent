@@ -12,11 +12,31 @@ spring:
     url: jdbc:mysql://121.196.198.8:3306/gmall_order?useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
 
+
+  rabbitmq:
+    host: 192.168.112.130
+    port: 5672
+    username: admin
+    password: admin
+    publisher-confirm-type: correlated #  消息在未被队列收到的情况下返回 保证消息不丢, 服务器会确认收到的消息
+    publisher-returns: true # 开启消息确认机制
+    listener:
+      simple:
+        acknowledge-mode: manual  #手动确认模式
+        prefetch: 1 # 消费者每次从队列获取的消息数量。此属性当不设置时为：轮询分发，设置为1为：公平分发
+    # 一个队列下的所有消费者是竞争关系。  但是一个交换机可以把消息广播给多个队列。
+
+
   main:
     allow-bean-definition-overriding: true
 
 
 service:
   order:
-    timeout: 1800
+    timeout: 60 # seconds
+
+
+
+
+
 

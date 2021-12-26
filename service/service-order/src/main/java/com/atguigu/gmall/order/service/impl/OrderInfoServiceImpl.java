@@ -4,6 +4,7 @@ import com.atguigu.gmall.client.cart.CartFeignClient;
 import com.atguigu.gmall.client.product.ProductFeignClient;
 import com.atguigu.gmall.client.user.UserFeignClient;
 import com.atguigu.gmall.client.ware.WareFeignClient;
+import com.atguigu.gmall.common.constant.RabbitMqConst;
 import com.atguigu.gmall.common.constant.RedisConst;
 import com.atguigu.gmall.common.execption.GmallException;
 import com.atguigu.gmall.common.result.ResultCodeEnum;
@@ -12,17 +13,19 @@ import com.atguigu.gmall.model.api.ConfirmOrderVo;
 import com.atguigu.gmall.model.cart.CartInfo;
 import com.atguigu.gmall.model.enums.OrderStatus;
 import com.atguigu.gmall.model.enums.ProcessStatus;
+import com.atguigu.gmall.model.mq.vo.OrderCreateMqTo;
 import com.atguigu.gmall.model.order.OrderDetail;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.order.OrderStatusLog;
 import com.atguigu.gmall.model.user.UserAddress;
+import com.atguigu.gmall.order.config.properties.OrderProperties;
 import com.atguigu.gmall.order.mapper.OrderDetailMapper;
 import com.atguigu.gmall.order.mapper.OrderInfoMapper;
 import com.atguigu.gmall.order.mapper.OrderStatusLogMapper;
-import com.atguigu.gmall.order.properties.OrderProperties;
 import com.atguigu.gmall.order.service.OrderDetailService;
 import com.atguigu.gmall.order.service.OrderInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -71,6 +74,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     private OrderStatusLogMapper orderStatusLogMapper;
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public ConfirmOrderVo checkoutCart() {
@@ -238,8 +243,28 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             remove(orderDetail.getSkuId(), userId);
         }
 
+        // 发送关闭订单消息(30分钟没付款)
+        rabbitTemplate.convertAndSend(RabbitMqConst.ORDER_EXCHANGE_NAME, RabbitMqConst.ORDER_DELAY_ROUNTING_KEY, new OrderCreateMqTo(orderId, userId, tradeNo));
+
         return orderId;
 
+    }
+
+    @Override
+    @Transactional
+    public void closeOrder(Long orderId, String orderStatus, String processStatus)  {
+        orderInfoMapper.closeOrder(orderId, orderStatus, processStatus);
+
+    }
+
+    @Override
+    public OrderInfo getOrderInfo(Long orderId) {
+        return orderInfoMapper.getOrderInfo(orderId);
+    }
+
+    @Override
+    public BigDecimal getOrderTotalAmount(Long orderId) {
+        return orderInfoMapper.getOrderTotalAmount(orderId);
     }
 
     /**
@@ -314,7 +339,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
         // 在生成tradeNo的同时, 往redis存一份 用来防止订单重复提交
         String tokenKey = RedisConst.ORDER_TEMP_TOKEN + userId;
-        stringRedisTemplate.opsForValue().set(tokenKey, tradeNo, 1800, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(tokenKey, tradeNo, orderProperties.getTimeout(), TimeUnit.SECONDS);
 
         return tradeNo;
     }
